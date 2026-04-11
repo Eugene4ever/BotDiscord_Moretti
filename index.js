@@ -35,9 +35,20 @@ client.on('interactionCreate', async interaction => {
       { name: '📍 Lieu', value: lieu },
       { name: '📌 Raison', value: raison }
     )
+    .setImage('https://cdn.discordapp.com/attachments/1489323538036035654/1492543286395801703/7DC3E674-8D3F-4B72-8C6C-8AC898C92425.png?ex=69dbb6c1&is=69da6541&hm=006f39eb9ffa226ec4b6e4807c0ded991ac3e600a6e44b3d8d9efdd29ac96477')
     .setFooter({ text: 'Moretti Family' });
 
-  await interaction.reply({ embeds: [embed] });
+  // Envoie le message avec @everyone
+  const msg = await interaction.reply({
+    content: '@everyone',
+    embeds: [embed],
+    allowedMentions: { parse: ['everyone'] },
+    fetchReply: true
+  });
+
+  // Ajoute les réactions
+  await msg.react('✅');
+  await msg.react('❌');
 });
 
 client.login(TOKEN);
