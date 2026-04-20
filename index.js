@@ -78,8 +78,8 @@ client.on('interactionCreate', async interaction => {
     const infos = interaction.options.getString('infos') || 'Aucune information supplémentaire';
 
     const embed = new EmbedBuilder()
-      .setTitle('🔫 Demande d\'Armement')
-      .setColor(0x2C2C2C)
+      .setTitle('Demande d\'Armement')
+      .setColor(0xB22222)
       .addFields(
         { name: '📅 Date de la demande', value: date },
         { name: '👤 Prénom RP', value: prenom },
@@ -88,7 +88,7 @@ client.on('interactionCreate', async interaction => {
         { name: '💵 Mode de paiement', value: paiement },
         { name: '📝 Informations supplémentaires', value: infos }
       )
-      .setFooter({ text: `Demande envoyée par ${interaction.user.username}` });
+      .setImage('https://cdn.discordapp.com/attachments/1489323538036035654/1495757730970079303/Image_Moretti_Arme.png?ex=69e76870&is=69e616f0&hm=1424228051c4dec9d2cfc8f02f2f86ac76e7d2300264bdd6a1f1a2620dd8895b');
 
     const channel = await client.channels.fetch(ARME_CHANNEL_ID);
     await channel.send({ embeds: [embed] });
