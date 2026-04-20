@@ -4,6 +4,7 @@ const TOKEN = process.env.TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
 const ARME_CHANNEL_ID = '1495715546954727516';
 const TERRITOIRE_CHANNEL_ID = '1493365620874678354';
+const BLANCHIMENT_CHANNEL_ID = '1493244367924891718';
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -40,6 +41,14 @@ client.once('ready', async () => {
       .addStringOption(opt => opt.setName('taxe').setDescription('Taxe versée').setRequired(true))
       .addStringOption(opt => opt.setName('date').setDescription('Date du paiement').setRequired(true))
       .addStringOption(opt => opt.setName('remarque').setDescription('Remarque éventuelle').setRequired(false)),
+
+    new SlashCommandBuilder()
+      .setName('blanchiment')
+      .setDescription('Déclarer les montants blanchis')
+      .addStringOption(opt => opt.setName('identite').setDescription('Déclinez votre identité').setRequired(true))
+      .addStringOption(opt => opt.setName('montant').setDescritpion('Le montant que vous avez blanchis').setRequired(true))
+      .addStringOption(opt => opt.setName('date').setDescription('La date de la transaciton').setRequired(true))
+      .addStringOption(opt => opt.setName('info').setDescription('Informations suplémentaires').setRequired(false)),
   ];
 
   const rest = new REST({ version: '10' }).setToken(TOKEN);
@@ -107,7 +116,7 @@ client.on('interactionCreate', async interaction => {
 
   // Commande /territoire
   if (interaction.commandName === 'territoire') {
-    const groupe = interaction.options.getString('groupe');
+    const activite = interaction.options.getString('activite');
     const territoire = interaction.options.getString('territoire');
     const taxe = interaction.options.getString('taxe');
     const date = interaction.options.getString('date');
@@ -128,6 +137,29 @@ client.on('interactionCreate', async interaction => {
     await channel.send({ embeds: [embed] });
     await interaction.reply({ content: '✅ La taxe de territoire a bien été enregistrée !', ephemeral: true });
   }
+
+  // Commande /blanchiment
+  if (interaction.commandName === 'blanchiment') {
+    const indentite = interaction.options.getString('indentite');
+    const montant = interaction.options.getString('montant');
+    const date = interaction.options.getString('date');
+    const info = interaction.options.getString('info');
+
+    const embed = new EmbedBuilder()
+      .setTitle('Comptabilité Blachiment')
+      .setColor(0xB22222)
+      .addFields(
+        { name : '🪪 Identité du Blanchisseur', value: indentite },
+        { name : '💰 Montant Blanchis', value: montant },
+        { name : '📅 Date du Blanchiment', value: date },
+        { name : 'ℹ️ Informations supplémentaire', value: info}
+      );
+
+    const channel = await client.channels.fetch(BLANCHIMENT_CHANNEL_ID);
+    await channel.send({ embeds: [embed] });
+    await interaction.reply({ content: '✅ Le message à bien été envoyé !', ephemeral: true });
+  }
+  
 });
 
 client.login(TOKEN);
