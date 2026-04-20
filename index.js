@@ -30,6 +30,7 @@ client.once('ready', async () => {
           { name: '🏦 Argent propre', value: 'Argent propre' }
         ))
       .addStringOption(opt => opt.setName('infos').setDescription('Informations supplémentaires').setRequired(false)),
+  ];
 
   const rest = new REST({ version: '10' }).setToken(TOKEN);
   await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands.map(c => c.toJSON()) });
