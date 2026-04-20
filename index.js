@@ -46,7 +46,7 @@ client.once('ready', async () => {
       .setName('blanchiment')
       .setDescription('Déclarer les montants blanchis')
       .addStringOption(opt => opt.setName('identite').setDescription('Déclinez votre identité').setRequired(true))
-      .addStringOption(opt => opt.setName('montant').setDescritpion('Le montant que vous avez blanchis').setRequired(true))
+      .addStringOption(opt => opt.setName('montant').setDescription('Le montant que vous avez blanchis').setRequired(true))
       .addStringOption(opt => opt.setName('date').setDescription('La date de la transaciton').setRequired(true))
       .addStringOption(opt => opt.setName('info').setDescription('Informations suplémentaires').setRequired(false)),
   ];
@@ -126,7 +126,7 @@ client.on('interactionCreate', async interaction => {
       .setTitle('Taxe de Territoire')
       .setColor(0xB22222)
       .addFields(
-        { name: '🏢 Groupe / Entreprise', value: groupe },
+        { name: '🏢 Groupe / Entreprise', value: activite },
         { name: '📍 Territoire concerné', value: territoire },
         { name: '💰 Taxe versée', value: taxe },
         { name: '📅 Date du paiement', value: date },
@@ -140,7 +140,7 @@ client.on('interactionCreate', async interaction => {
 
   // Commande /blanchiment
   if (interaction.commandName === 'blanchiment') {
-    const indentite = interaction.options.getString('indentite');
+    const identite = interaction.options.getString('identite');
     const montant = interaction.options.getString('montant');
     const date = interaction.options.getString('date');
     const info = interaction.options.getString('info');
@@ -149,7 +149,7 @@ client.on('interactionCreate', async interaction => {
       .setTitle('Comptabilité Blachiment')
       .setColor(0xB22222)
       .addFields(
-        { name : '🪪 Identité du Blanchisseur', value: indentite },
+        { name : '🪪 Identité du Blanchisseur', value: identite },
         { name : '💰 Montant Blanchis', value: montant },
         { name : '📅 Date du Blanchiment', value: date },
         { name : 'ℹ️ Informations supplémentaire', value: info}
