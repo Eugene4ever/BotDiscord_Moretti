@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, EmbedBuild
 const TOKEN = process.env.TOKEN;
 const CLIENT_ID = process.env.CLIENT_ID;
 const ARME_CHANNEL_ID = '1495715546954727516';
+const TERRITOIRE_CHANNEL_ID = '1493365620874678354';
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -30,6 +31,15 @@ client.once('ready', async () => {
           { name: '🏦 Argent propre', value: 'Argent propre' }
         ))
       .addStringOption(opt => opt.setName('infos').setDescription('Informations supplémentaires').setRequired(false)),
+
+    new SlashCommandBuilder()
+      .setName('territoire')
+      .setDescription('Déclarer une taxe de territoire')
+      .addStringOption(opt => opt.setName('groupe').setDescription('Appartenance à un groupe / Entreprise').setRequired(true))
+      .addStringOption(opt => opt.setName('territoire').setDescription('Territoire concerné').setRequired(true))
+      .addStringOption(opt => opt.setName('taxe').setDescription('Taxe versée').setRequired(true))
+      .addStringOption(opt => opt.setName('date').setDescription('Date du paiement').setRequired(true))
+      .addStringOption(opt => opt.setName('remarque').setDescription('Remarque éventuelle').setRequired(false)),
   ];
 
   const rest = new REST({ version: '10' }).setToken(TOKEN);
@@ -54,7 +64,7 @@ client.on('interactionCreate', async interaction => {
         { name: '📍 Lieu', value: lieu },
         { name: '📌 Raison', value: raison }
       )
-      .setImage('https://cdn.discordapp.com/attachments/1489323538036035654/1494587251836063774/BBEA237C-331D-441C-9BE1-69174180A3C9.png?ex=69e71ad8&is=69e5c958&hm=a8da5d0c0937bf57b2c9e63686c2992096f666a473e1853908dbd3971cc8399f')
+      .setImage('https://cdn.discordapp.com/attachments/1489323538036035654/1494587251836063774/BBEA237C-331D-441C-9BE1-69174180A3C9.png?ex=69e71ad8&is=69e5c958&hm=a8da5d0c0937bf57b2c9e63686c2992096f666a473e1853908dbd3971ca8399f')
       .setFooter({ text: 'Moretti Family' });
 
     const msg = await interaction.reply({
@@ -93,6 +103,30 @@ client.on('interactionCreate', async interaction => {
     const channel = await client.channels.fetch(ARME_CHANNEL_ID);
     await channel.send({ embeds: [embed] });
     await interaction.reply({ content: '✅ Ta demande d\'armement a bien été envoyée !', ephemeral: true });
+  }
+
+  // Commande /territoire
+  if (interaction.commandName === 'territoire') {
+    const groupe = interaction.options.getString('groupe');
+    const territoire = interaction.options.getString('territoire');
+    const taxe = interaction.options.getString('taxe');
+    const date = interaction.options.getString('date');
+    const remarque = interaction.options.getString('remarque') || 'Aucune remarque';
+
+    const embed = new EmbedBuilder()
+      .setTitle('Taxe de Territoire')
+      .setColor(0xB22222)
+      .addFields(
+        { name: '🏢 Groupe / Entreprise', value: groupe },
+        { name: '📍 Territoire concerné', value: territoire },
+        { name: '💰 Taxe versée', value: taxe },
+        { name: '📅 Date du paiement', value: date },
+        { name: '📝 Remarque', value: remarque }
+      );
+
+    const channel = await client.channels.fetch(TERRITOIRE_CHANNEL_ID);
+    await channel.send({ embeds: [embed] });
+    await interaction.reply({ content: '✅ La taxe de territoire a bien été enregistrée !', ephemeral: true });
   }
 });
 
