@@ -139,26 +139,27 @@ client.on('interactionCreate', async interaction => {
   }
 
   // Commande /blanchiment
-  if (interaction.commandName === 'blanchiment') {
-    const identite = interaction.options.getString('identite');
-    const montant = interaction.options.getString('montant');
-    const date = interaction.options.getString('date');
-    const info = interaction.options.getString('info');
+if (interaction.commandName === 'blanchiment') {
+  const identite = interaction.options.getString('identite');
+  const montant = interaction.options.getString('montant');
+  const date = interaction.options.getString('date');
+  const info = interaction.options.getString('info') || 'Aucune information supplémentaire';
 
-    const embed = new EmbedBuilder()
-      .setTitle('Comptabilité Blachiment')
-      .setColor(0xB22222)
-      .addFields(
-        { name : '🪪 Identité du Blanchisseur', value: identite },
-        { name : '💰 Montant Blanchis', value: montant },
-        { name : '📅 Date du Blanchiment', value: date },
-        { name : 'ℹ️ Informations supplémentaire', value: info}
-      );
+  const embed = new EmbedBuilder()
+    .setTitle('Comptabilité Blanchiment')
+    .setColor(0xB22222)
+    .addFields(
+      { name: '🪪 Identité du Blanchisseur', value: identite },
+      { name: '💰 Montant Blanchis', value: montant },
+      { name: '📅 Date du Blanchiment', value: date },
+      { name: 'ℹ️ Informations supplémentaires', value: info }
+    );
 
-    const channel = await client.channels.fetch(BLANCHIMENT_CHANNEL_ID);
-    await channel.send({ embeds: [embed] });
-    await interaction.reply({ content: '✅ Le message à bien été envoyé !', ephemeral: true });
-  }
+  await interaction.reply({ content: '✅ Le message a bien été envoyé !', ephemeral: true });
+
+  const channel = await client.channels.fetch(BLANCHIMENT_CHANNEL_ID);
+  await channel.send({ embeds: [embed] });
+}
   
 });
 
