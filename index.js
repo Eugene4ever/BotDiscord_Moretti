@@ -36,7 +36,7 @@ client.once('ready', async () => {
     new SlashCommandBuilder()
       .setName('territoire')
       .setDescription('Déclarer une taxe de territoire')
-      .addStringOption(opt => opt.setName('activite').setDescription('Appartenance à un groupe / Entreprise').setRequired(true))
+      .addStringOption(opt => opt.setName('activite').setDescription('Appartenance à un groupe / Entreprise').setRequired(false))
       .addStringOption(opt => opt.setName('territoire').setDescription('Territoire concerné').setRequired(true))
       .addStringOption(opt => opt.setName('taxe').setDescription('Taxe versée').setRequired(true))
       .addStringOption(opt => opt.setName('date').setDescription('Date du paiement').setRequired(true))
